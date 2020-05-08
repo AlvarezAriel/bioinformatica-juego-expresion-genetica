@@ -1,4 +1,4 @@
-extends Node2D
+extends Node
 
 var AminoContact = preload("res://AminoContact.tscn")
 var Amino = preload("res://Aminoacid.tscn")
@@ -13,7 +13,7 @@ onready var aminos = $aminos
 onready var tween = $Tween
 onready var holdingAmino = $Selector/AminoContact
 
-var initial_codon_count = 8
+var initial_codon_count = 6
 var noice_amino_count_total = 30
 
 enum GameState {
@@ -98,7 +98,22 @@ func _restart_game():
 	get_tree().reload_current_scene()
 
 func _game_over():
-	_restart_game()
+	selector.frame = 2
+	$GameOverScreen.visible = true
+	tween.interpolate_property($GameOverScreen, "modulate", Color.transparent, Color.white, 0.6, 
+			Tween.TRANS_ELASTIC, Tween.EASE_OUT
+	)
+	tween.start()
+
+func _game_won():
+	selector.frame = 1
+	$GameOverScreen.visible = true
+	$GameOverScreen.frame = 1
+	$GameOverScreen/TextureRect.modulate = Color(0.168627, 0.352941, 0.113725, 0.439216)
+	tween.interpolate_property($GameOverScreen, "modulate", Color.transparent, Color.white, 0.6, 
+			Tween.TRANS_ELASTIC, Tween.EASE_OUT
+	)
+	tween.start()
 
 func _input(event):
 	
@@ -142,6 +157,9 @@ func _on_start_amino_fired():
 	var nucleotids = container.get_children()
 	var is_first_codon = true
 	var codon_chars = []
+	
+	var animation_offset = 0.0
+	var animation_duration = 0.2
 	for n in nucleotids:
 		codon_chars.push_back(n)
 		if codon_chars.size() == 3:
@@ -159,9 +177,11 @@ func _on_start_amino_fired():
 				codon_chars[0].char_representation, 
 				codon_chars[1].char_representation, 
 				codon_chars[2].char_representation)
-				
+			tween.interpolate_property(codon, "position:y", codon.position.y - 8, codon.position.y, animation_duration, Tween.TRANS_ELASTIC, Tween.EASE_OUT, animation_offset)
+			animation_offset += animation_duration
 			codon_chars.clear()
-			
+	
+	tween.start()
 	
 	for c in codon_chars:
 		container.remove_child(c)
@@ -181,9 +201,11 @@ func _on_amino_fired():
 	sparse_used_aminos[selector_logical_pos] = holdingAmino.aminoacid.char_representation
 	
 	if holdingAmino.aminoacid.char_representation != codones.get_child(selector_logical_pos).amino_char:
-		print("Wrong matching!!")
-	else:
-		print("Matched correctly")
+		holdingAmino.aminoacid.modulate = Color.red
+		state = GameState.FINISHED
+		_game_over()
+		return
+		
 	
 	var sendingAmino = holdingAmino
 	holdingAmino = AminoContact.instance()
@@ -207,5 +229,11 @@ func _on_amino_fired():
 	else:
 		selector.remove_child(holdingAmino)
 		holdingAmino = null
+		state = GameState.FINISHED
+		_game_won()
 	
 	tween.start()
+
+
+func _on_RetryBtn_pressed():
+	_restart_game()
