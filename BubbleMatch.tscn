@@ -1,0 +1,49 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://BubbleMatch.gd" type="Script" id=1]
+[ext_resource path="res://assets/selector.png" type="Texture" id=3]
+[ext_resource path="res://assets/selector_line.png" type="Texture" id=4]
+[ext_resource path="res://assets/background.png" type="Texture" id=5]
+[ext_resource path="res://AminoContact.tscn" type="PackedScene" id=6]
+
+[node name="BubbleMatch" type="Node2D"]
+position = Vector2( -23, 16 )
+script = ExtResource( 1 )
+
+[node name="Bg" type="Sprite" parent="."]
+position = Vector2( 258.5, 136 )
+scale = Vector2( 20.9643, 20 )
+texture = ExtResource( 5 )
+
+[node name="contacts" type="Node2D" parent="."]
+position = Vector2( 32, 92 )
+
+[node name="Selector" type="Sprite" parent="."]
+position = Vector2( 32, 208 )
+texture = ExtResource( 3 )
+offset = Vector2( 12.5, 8 )
+
+[node name="TextureRect" type="TextureRect" parent="Selector"]
+margin_left = 1.0
+margin_top = -117.0
+margin_right = 24.0
+margin_bottom = 1.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AminoContact" parent="Selector" instance=ExtResource( 6 )]
+show_behind_parent = true
+position = Vector2( 0, -17 )
+
+[node name="container" type="Node2D" parent="."]
+position = Vector2( 32, 80 )
+
+[node name="codones" type="Node2D" parent="."]
+
+[node name="aminos" type="Node2D" parent="."]
+position = Vector2( 31, 240 )
+
+[node name="Tween" type="Tween" parent="."]

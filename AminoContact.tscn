@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://assets/amino_contact.png" type="Texture" id=1]
+[ext_resource path="res://Aminoacid.tscn" type="PackedScene" id=2]
+[ext_resource path="res://AminoContact.gd" type="Script" id=3]
+
+[node name="AminoContact" type="Sprite"]
+texture = ExtResource( 1 )
+offset = Vector2( 12.5, 3 )
+script = ExtResource( 3 )
+
+[node name="Aminoacid" parent="." instance=ExtResource( 2 )]
+position = Vector2( 2, 5 )

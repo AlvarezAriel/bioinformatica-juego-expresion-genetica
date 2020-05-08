@@ -1,0 +1,10 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://assets/aminoacid_list.png" type="Texture" id=1]
+[ext_resource path="res://Aminoacid.gd" type="Script" id=2]
+
+[node name="Aminoacid" type="Sprite"]
+texture = ExtResource( 1 )
+offset = Vector2( 10.5, 10 )
+hframes = 20
+script = ExtResource( 2 )
